@@ -19,8 +19,10 @@ class Msg(models.Model):
     pm25_value = models.IntegerField(default=-1)
     is_health = models.BooleanField(null=True)
 
+    city = models.CharField(max_length=20, null=True)
+
     date_added = models.DateTimeField(auto_now_add=True)
-    last_added = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username + '-' + self.date_added
+        return self.user.username + '-' + self.date_added.__str__()

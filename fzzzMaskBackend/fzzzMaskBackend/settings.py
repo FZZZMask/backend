@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # Own applications
     'users',
     'msg',
+    'visual',
 ]
 
 SITE_ID = 1
@@ -104,7 +105,8 @@ AUTH_PASSWORD_VALIDATORS = []
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 

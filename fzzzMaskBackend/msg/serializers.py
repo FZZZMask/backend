@@ -14,7 +14,7 @@ class MsgSerializer(serializers.ModelSerializer):
             'pm25_value',
             'is_health',
             'date_added',
-            'last_added'
+            'last_updated'
         )
 
 
