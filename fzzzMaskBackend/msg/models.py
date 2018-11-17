@@ -10,14 +10,14 @@ class Msg(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        null=False
+        null=False,
     )
 
-    latitude = models.FloatField(verbose_name="Latitude", default=0)
-    longitude = models.FloatField(verbose_name="Longitude", default=0)
-    is_cold = models.BooleanField(default=False)
+    latitude = models.FloatField(verbose_name="Latitude", default=-1)
+    longitude = models.FloatField(verbose_name="Longitude", default=-1)
+    is_cold = models.BooleanField(null=True)
     pm25_value = models.IntegerField(default=-1)
-    is_health = models.BooleanField(default=False)
+    is_health = models.BooleanField(null=True)
 
     date_added = models.DateTimeField(auto_now_add=True)
     last_added = models.DateTimeField(auto_now_add=True)

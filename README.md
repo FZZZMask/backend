@@ -10,4 +10,6 @@ $ cd fzzzMaskBackend
 $ python manage.py runserver 0.0.0.0:8000 --insecure 
 ```
 
-To RayZhao :<
+## API Documentation
+
+[FZZZMask API Documentation](https://documenter.getpostman.com/view/3683551/RzZDhGkT)

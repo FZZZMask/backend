@@ -6,6 +6,7 @@ class MsgSerializer(serializers.ModelSerializer):
     class Meta:
         model = Msg
         fields = (
+            'pk',
             'user',
             'latitude',
             'longitude',

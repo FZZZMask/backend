@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
+from msg import views as msg_views
+
 router = routers.DefaultRouter()
 # Register router path
-
+router.register("msg", msg_views.MsgViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
