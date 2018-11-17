@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     # Own applications
     'users',
+    'msg',
 ]
 
 SITE_ID = 1
