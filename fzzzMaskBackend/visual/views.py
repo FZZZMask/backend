@@ -1,11 +1,11 @@
 from datetime import datetime
 
+import requests
 from dateutil.relativedelta import relativedelta
-from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-import requests
 from msg.models import Msg
 
 
@@ -44,7 +44,6 @@ def health(request, *args, **kwargs):
             return None
         else:
             return city
-
 
     health_dict = {
         "南京市": 0,
@@ -91,14 +90,14 @@ def pm25(request):
 
     granularity = request.GET.get('granularity', None)
     if granularity == "weekly":
-        frontier = now - relativedelta(months=1)
-    elif granularity == "daily":
         frontier = now - relativedelta(weeks=1)
-    else:  # return "hourly"
+    elif granularity == "daily":
         frontier = now - relativedelta(days=1)
+    else:  # return "hourly"
+        frontier = now - relativedelta(hours=1)
 
     pm25_values = Msg.objects.filter(date_added__range=(frontier, now),
-                                    pm25_value__isnull=False)
+                                     pm25_value__isnull=False)
 
     data_list = list()
 
@@ -112,15 +111,18 @@ def pm25(request):
         y = int((pm25_value.latitude - 31.58) // 0.0094)
         value = pm25_value.pm25_value
 
-        max_value = max(value, max_value)
-
         count = y * 50 + x
         print(count, x, y)
         if 0 <= count < 2500:
             data_list[count][2] += value
+            max_value = max(data_list[count][2], max_value)  # largest sum
 
     for data_elem in data_list:
-        level = ((6 * value) // max_value)
+        if max_value != 0:
+            level = ((6 * data_elem[2]) // max_value)
+        else:
+            level = 0
+
         if level >= 6:
             level = 5
 
@@ -134,11 +136,62 @@ def pm25(request):
     return Response(data, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
 def cold(request):
     """
     感冒区域数据
     :param request:
     :return:
     """
-    pass
 
+    now = datetime.now()
+    frontier = now
+
+    granularity = request.GET.get('granularity', None)
+    if granularity == "monthly":
+        frontier = now - relativedelta(months=1)
+    elif granularity == "weekly":
+        frontier = now - relativedelta(weeks=1)
+    else:  # return "daily"
+        frontier = now - relativedelta(days=1)
+
+    cold_patients = Msg.objects.filter(date_added__range=(frontier, now),
+                                       is_cold=True)
+
+    print(cold_patients)
+
+    data_list = list()
+
+    for i in range(50):  # y
+        for j in range(50):  # x
+            data_list.append([j, i, 0])
+
+    max_value = 0
+    for cold_patient in cold_patients:
+        x = int((cold_patient.longitude - 118.46) // 0.0114)
+        y = int((cold_patient.latitude - 31.58) // 0.0094)
+
+        count = y * 50 + x
+        # print(count, x, y)
+        if 0 <= count < 2500:
+            data_list[count][2] += 1
+            max_value = max(data_list[count][2], max_value)
+
+    for data_elem in data_list:
+        if max_value != 0:
+            level = ((6 * data_elem[2]) // max_value)
+        else:
+            level = 0
+
+        if level >= 6:
+            level = 5
+
+        # Reverse
+        level = 5 - level
+        # 5 is the worst, 0 is the best.
+
+        data_elem[2] = level
+
+    data = {"data": data_list}
+
+    return Response(data, status=status.HTTP_200_OK)
