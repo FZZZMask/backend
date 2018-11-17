@@ -1,7 +1,7 @@
 # FZZZMask Backend Repository
 
 ```bash
-$ git clone xxxxx
+$ git clone https://github.com/FZZZMask/backend.git
 $ cd backend
 $ python3 -m venv py36
 $ source py36/bin/activate
