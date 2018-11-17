@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,7 +35,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third party applications
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'rest_auth.registration',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    # Own applications
+    'users',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -69,10 +82,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'fzzzMaskBackend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+
+# TODO: change database to MySQL / MariaDB
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -80,25 +94,9 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        # 'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        # 'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        # 'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
+AUTH_PASSWORD_VALIDATORS = []
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -113,8 +111,47 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# RESTful Framework Settings
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 15
+}
+
+# REST_FRAMEWORK > DEFAULT_AUTHENTICATION_CLASSES
+# 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+# 'rest_framework.authentication.TokenAuthentication',
+# 'rest_framework.authentication.SessionAuthentication',
+# 'rest_framework.authentication.BasicAuthentication',
+
+# REST_SESSION_LOGIN = False
+# REST_USE_JWT = True
+
+# JWT_AUTH = {
+#     'JWT_ENCODE_HANDLER':
+#     'rest_framework_jwt.utils.jwt_encode_handler',
+#
+#     'JWT_DECODE_HANDLER':
+#     'rest_framework_jwt.utils.jwt_decode_handler',
+#
+#     'JWT_PAYLOAD_HANDLER':
+#     'rest_framework_jwt.utils.jwt_payload_handler',
+#
+#     'JWT_PAYLOAD_GET_USER_ID_HANDLER':
+#     'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
+#
+#     'JWT_RESPONSE_PAYLOAD_HANDLER':
+#     'rest_framework_jwt.utils.jwt_response_payload_handler',
+# }
