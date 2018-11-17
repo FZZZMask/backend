@@ -6,10 +6,16 @@ $ cd backend
 $ python3 -m venv py3
 $ source py3/bin/activate
 $ pip install -r requirements.txt
-$ cd fzzzMaskBackend
+$ cd fzzzMaskBackend/
+$ python manage.py makemigrations
+$ python manage.py migrate
 $ python manage.py runserver 0.0.0.0:8000 --insecure 
 ```
 
 ## API Documentation
 
 [FZZZMask API Documentation](https://documenter.getpostman.com/view/3683551/RzZDhGkT)
+
+## Copyright
+
+Copyright &copy; 2018 Zhenzhen Zhao
