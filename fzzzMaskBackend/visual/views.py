@@ -12,6 +12,13 @@ from msg.models import Msg
 # Create your views here.
 @api_view(['GET'])
 def health(request, *args, **kwargs):
+    """
+    突发死亡监测
+    :param request:
+    :param args:
+    :param kwargs:
+    :return:
+    """
     now = datetime.now()
     frontier = now
 
@@ -72,10 +79,66 @@ def health(request, *args, **kwargs):
     return Response(health_dict, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
 def pm25(request):
-    pass
+    """
+    PM 2.5 区域数据
+    :param request:
+    :return:
+    """
+    now = datetime.now()
+    frontier = now
+
+    granularity = request.GET.get('granularity', None)
+    if granularity == "weekly":
+        frontier = now - relativedelta(months=1)
+    elif granularity == "daily":
+        frontier = now - relativedelta(weeks=1)
+    else:  # return "hourly"
+        frontier = now - relativedelta(days=1)
+
+    pm25_values = Msg.objects.filter(date_added__range=(frontier, now),
+                                    pm25_value__isnull=False)
+
+    data_list = list()
+
+    for i in range(50):  # y
+        for j in range(50):  # x
+            data_list.append([j, i, 0])
+
+    max_value = 0
+    for pm25_value in pm25_values:
+        x = int((pm25_value.longitude - 118.46) // 0.0114)
+        y = int((pm25_value.latitude - 31.58) // 0.0094)
+        value = pm25_value.pm25_value
+
+        max_value = max(value, max_value)
+
+        count = y * 50 + x
+        print(count, x, y)
+        if 0 <= count < 2500:
+            data_list[count][2] += value
+
+    for data_elem in data_list:
+        level = ((6 * value) // max_value)
+        if level >= 6:
+            level = 5
+
+        # Reverse
+        level = 5 - level
+
+        data_elem[2] = level
+
+    data = {"data": data_list}
+
+    return Response(data, status=status.HTTP_200_OK)
 
 
 def cold(request):
+    """
+    感冒区域数据
+    :param request:
+    :return:
+    """
     pass
 

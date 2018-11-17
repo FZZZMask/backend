@@ -16,7 +16,7 @@ class Msg(models.Model):
     latitude = models.FloatField(verbose_name="Latitude", default=-1)
     longitude = models.FloatField(verbose_name="Longitude", default=-1)
     is_cold = models.BooleanField(null=True)
-    pm25_value = models.IntegerField(default=-1)
+    pm25_value = models.IntegerField(null=True)
     is_health = models.BooleanField(null=True)
 
     city = models.CharField(max_length=20, null=True)

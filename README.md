@@ -18,7 +18,7 @@ $ python manage.py runserver 0.0.0.0:8000 --insecure
 
 ## License
 
-This repository is licensed under the [BSD 3-Clause License](LICENSE.md)
+This repository is licensed under the [BSD 3-Clause License](LICENSE.md).
 
 
 Copyright &copy; 2018 Zhenzhen Zhao
