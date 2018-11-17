@@ -28,6 +28,7 @@ urlpatterns = [
 
     path('api/v1/', include(router.urls)),
     path('api/v1/auth/', include('rest_auth.urls')),
+    path('api/v1/visual/', include('visual.urls')),
     path('api/v1/auth/registration', include('rest_auth.registration.urls')),
 
 ]
