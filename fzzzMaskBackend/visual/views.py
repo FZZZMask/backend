@@ -107,6 +107,9 @@ def pm25(request):
 
     max_value = 0
     for pm25_value in pm25_values:
+        if pm25_value.longitude == -1 or pm25_value.latitude == -1:
+            continue
+
         x = int((pm25_value.longitude - 118.46) // 0.0114)
         y = int((pm25_value.latitude - 31.58) // 0.0094)
         value = pm25_value.pm25_value
@@ -168,6 +171,9 @@ def cold(request):
 
     max_value = 0
     for cold_patient in cold_patients:
+        if cold_patient.latitude == -1 or cold_patient.longitude == -1:
+            continue
+
         x = int((cold_patient.longitude - 118.46) // 0.0114)
         y = int((cold_patient.latitude - 31.58) // 0.0094)
 
